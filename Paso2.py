@@ -4,11 +4,11 @@ capitalización de los intereses generados para los semestres estándares comple
 sucesivos que apliquen
 '''
 
-def calcular_capitalizacion_por_semestre_interactivo():
+def calcular_capitalizacion_por_semestre_interactivo(D_calc,i_fsi_db,semestres):
     # Solicitar al usuario que ingrese los datos necesarios
-    D = float(input("Por favor, ingresa el monto del depósito inicial (D): "))
-    i_fsi = float(input("Por favor, ingresa la tasa de interés anual como porcentaje (i_fsi): "))
-    n = int(input("Por favor, ingresa el número total de semestres a calcular: "))
+    D = D_calc # float(input("Por favor, ingresa el monto del depósito inicial (D): "))
+    i_fsi = i_fsi_db # float(input("Por favor, ingresa la tasa de interés anual como porcentaje (i_fsi): "))
+    n = semestres # int(input("Por favor, ingresa el número total de semestres a calcular: "))
 
     # Convertir la tasa de interés anual a una tasa semestral
     i_fsi = i_fsi / 100
@@ -27,4 +27,4 @@ def calcular_capitalizacion_por_semestre_interactivo():
     for i, deposito in enumerate(depositos_por_semestre):
         print(f"Semestre {i}: {deposito:.2f}")
 
-calcular_capitalizacion_por_semestre_interactivo()
+# calcular_capitalizacion_por_semestre_interactivo()

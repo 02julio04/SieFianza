@@ -4,11 +4,12 @@ la Tasa de lnteres Anual correspondiente al mes en que se realizó el pago del
 depósito:
 '''
 
-def calcular_deposito_capitalizado():
+
+def calcular_deposito_capitalizado(imp_fian_db,t_fsi_calc,i_fsi_db):
     
-    D = float(input("ingresa el monto del depósito inicial (D): "))
-    i_fsi = float(input("ingresa la tasa de interés anual como porcentaje (i_fsi): "))
-    t_fsi = int(input("ingresa la fracción de semestre en días (t_fsi): "))
+    D = imp_fian_db #float(input("ingresa el monto del depósito inicial (D): "))
+    i_fsi = i_fsi_db #float(input("ingresa la tasa de interés anual como porcentaje (i_fsi): "))
+    t_fsi = t_fsi_calc #int(input("ingresa la fracción de semestre en días (t_fsi): "))
     
     # Convertir la tasa de interés a formato decimal
     i_fsi = i_fsi / 100
@@ -19,4 +20,4 @@ def calcular_deposito_capitalizado():
     # Mostrar el resultado
     return D_fsi
 
-print("El depósito capitalizado al finalizar la fracción de semestre inicial (D_fsi) es:", calcular_deposito_capitalizado())
+# print("El depósito capitalizado al finalizar la fracción de semestre inicial (D_fsi) es:", calcular_deposito_capitalizado())
