@@ -2,11 +2,11 @@
 AGREGAR la capitalización del depósito para la fracción final de semestre
 '''
 
-def capitalización_depósito_final_semestre():
+def capitalización_depósito_final_semestre(ult_deposito):
     # Solicitar al usuario que ingrese los datos necesarios
-    D = float(input("Por favor, ingresa el monto del depósito del ultimo semestre (Dsn): "))
-    i_fsi = float(input("Por favor, ingresa la tasa de interés anual como porcentaje del ultimo semestre (i_fsn): "))
-    t_fsi = int(input("Por favor, ingresa la fracción de semestre en días (t_fsi): "))
+    D = ult_deposito # float(input("Por favor, ingresa el monto del depósito del ultimo semestre (Dsn): "))
+    i_fsi =   float(input("Por favor, ingresa la tasa de interés anual como porcentaje del ultimo semestre (i_fsn): "))
+    t_fsi =   int(input("Por favor, ingresa la fracción de semestre en días (t_fsi): "))
 
     # Convertir la tasa de interés a formato decimal
     i_fsi = i_fsi / 100
@@ -18,7 +18,7 @@ def capitalización_depósito_final_semestre():
     return D_f
 
 # Probar función
-print(" AGREGADA la capitalización del depósito para la fracción final de semestre(D_f) es:", capitalización_depósito_final_semestre())
+# print(" AGREGADA la capitalización del depósito para la fracción final de semestre(D_f) es:", capitalización_depósito_final_semestre())
 
 
 

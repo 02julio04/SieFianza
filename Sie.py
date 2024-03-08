@@ -7,7 +7,7 @@ import DeterminaTsfi
 import Semestres
 import Paso1 as p1
 import Paso2 as p2
-# import Paso3 as p3
+import Paso3 as p3
 
 
 def SieFianza():
@@ -18,6 +18,6 @@ def SieFianza():
     # Paso 1
     p1.Paso1.calcular_deposito_capitalizado(imp_fian_db,t_sfi,i_fsi_db)
     # Paso 2
-    p2.Paso2(imp_fian_db,i_fsi_db,Semestres.calcular_semestres(fecha_deposito_str,fecha_corte_str))
+    ult_depo = p2.Paso2(imp_fian_db,i_fsi_db,Semestres.calcular_semestres(fecha_deposito_str,fecha_corte_str))
     # Paso 3
-    # p3.Paso3()
+    p3.Paso3(ult_depo)
