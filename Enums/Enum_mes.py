@@ -2,20 +2,20 @@ import enum
 from datetime import datetime
 
 class EnumMeses(enum.Enum):
-    Enero = 1
-    Febrero = 2
-    Marzo = 3
-    Abril = 4
-    Mayo = 5
-    Junio = 6
-    Julio = 7
-    Agosto = 8
-    Septiembre = 9
-    Octubre = 10
-    Noviembre = 11
-    Diciembre = 12
+    Enero = "January"
+    Febrero = "February"
+    Marzo = "March"
+    Abril = "April"
+    Mayo = "May"
+    Junio = "June"
+    Julio = "July"
+    Agosto = "August"
+    Septiembre = "September"
+    Octubre = "October"
+    Noviembre = "November"
+    Diciembre = "December"
 
 def obtener_nombre_mes(fecha):
-    mes_numero = fecha.month
-    mes_nombre = EnumMeses(mes_numero).name
+    mes = datetime.strptime(fecha, "%Y-%m-%d").strftime("%B")
+    mes_nombre = EnumMeses(mes).name
     return mes_nombre

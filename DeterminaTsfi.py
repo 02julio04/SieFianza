@@ -1,6 +1,6 @@
 # calcular la fracción de semestre (t_fsi) entre dos fechas
 from datetime import datetime
-from DB import Buscar_en_BD
+import DB
 
 def calcular_fraccion_semestre(fecha_deposito_str,fecha_corte_str):
     # Solicitar al usuario las fechas de depósito y corte
