@@ -18,7 +18,14 @@ def calcular_capitalizacion_por_semestre_interactivo(D_calc,i_fsi_db,semestres):
     D_actual = D
     depositos_por_semestre = [D]  # Incluir el depósito inicial
 
-    # Aplicar la capitalización para cada semestre hasta n
+    # Idea: búsqueda de tasa de interés en la base de datos para cada semestre
+    # Usar una bandera que sea False cuando esté en el semestre de diciembre
+    # y cambie a True cuando se mueva al próximo semestre (el loop del cálculo de los semestres cambie de iteración)
+    # y así buscar la tasa de interés en la base de datos para el próximo semestre
+
+    # Hacer que i_semestral sea una lista con todos los valores de la tasa de interés para cada semestre( Esta es supuestamente mas eficiente, crer una nueva funcion)
+
+    # Aplicar la capitalización para cada semestre hasta n 
     for _ in range(1, n+1):
         D_actual *= (1 + i_semestral)
         depositos_por_semestre.append(D_actual)
