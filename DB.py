@@ -22,16 +22,16 @@ class Database:
         conn = self.establish_connection()
         cursor = conn.cursor()
 
-        cursor.execute("SELECT NIS_RAD FROM [EDE-este]")
+        cursor.execute("SELECT NIS_RAD FROM [EDE-este] where year(F_RES_CONT) >= 2017")
         identificador_db = cursor.fetchall()
 
-        cursor.execute("SELECT F_RES_CONT FROM [EDE-este]")
+        cursor.execute("SELECT F_RES_CONT FROM [EDE-este] where year(F_RES_CONT) >= 2017")
         fecha_deposito_db = cursor.fetchall()
         
-        cursor.execute('SELECT F_CORTE FROM [EDE-este]')
+        cursor.execute('SELECT F_CORTE FROM [EDE-este] where year(F_RES_CONT) >= 2017')
         fecha_corte_db = cursor.fetchall()
 
-        cursor.execute('SELECT IMP_FIAN FROM [EDE-este]')
+        cursor.execute('SELECT IMP_FIAN FROM [EDE-este] where year(F_RES_CONT) >= 2017')
         imp_fian_db = cursor.fetchall()
 
         cursor.close()

@@ -16,8 +16,8 @@ def calcular_fraccion_semestre(fecha_deposito_str,fecha_corte_str):
     # Calcular la fracción del semestre
     t_fsi = (fecha_corte - fecha_deposito).days
     
-    print(f"La fracción del semestre (t_fsi) es: {t_fsi} días")
+   # print(f"La fracción del semestre (t_fsi) es: {t_fsi} días")
 
-    return t_fsi,fecha_deposito,fecha_corte    
+    return t_fsi   
 
 # calcular_fraccion_semestre()
