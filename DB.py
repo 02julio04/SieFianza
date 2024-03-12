@@ -22,16 +22,16 @@ class Database:
         conn = self.establish_connection()
         cursor = conn.cursor()
 
-        cursor.execute("SELECT NIS_RAD FROM [EDE-este] where year(F_RES_CONT) >= 2017")
+        cursor.execute("SELECT TOP 10 NIS_RAD FROM [EDE-este] where year(F_RES_CONT) >= 2017")
         identificador_db = cursor.fetchall()
 
-        cursor.execute("SELECT F_RES_CONT FROM [EDE-este] where year(F_RES_CONT) >= 2017")
+        cursor.execute("SELECT TOP 10 F_RES_CONT FROM [EDE-este] where year(F_RES_CONT) >= 2017")
         fecha_deposito_db = cursor.fetchall()
         
-        cursor.execute('SELECT F_CORTE FROM [EDE-este] where year(F_RES_CONT) >= 2017')
+        cursor.execute('SELECT TOP 10 F_CORTE FROM [EDE-este] where year(F_RES_CONT) >= 2017')
         fecha_corte_db = cursor.fetchall()
 
-        cursor.execute('SELECT IMP_FIAN FROM [EDE-este] where year(F_RES_CONT) >= 2017')
+        cursor.execute('SELECT TOP 10 IMP_FIAN FROM [EDE-este] where year(F_RES_CONT) >= 2017')
         imp_fian_db = cursor.fetchall()
 
         cursor.close()
@@ -61,47 +61,29 @@ class Database:
 
         return i_fsi_db
     
-    def crear_tabla_provicional(self,identificador,fecha_deposito_db, fecha_corte_db, imp_fian_db, i_fsi_db, D_fsi,ult_depo,D_f):
-      #  conn = self.establish_connection()
-      #  cursor = conn.cursor()
-      #  cursor.execute("CREATE TABLE #temp (NIS_RAD INT, F_RES_CONT DATE, F_CORTE DATE, IMP_FIAN FLOAT, Promedio_Mensual FLOAT, D_fsi FLOAT, Deposito_Ultimo_semestre FLOAT, D_f FLOAT)")
-
-        # Insertar datos en la tabla temporal
-      # cursor.execute("INSERT INTO #temp (NIS_RAD, F_RES_CONT, F_CORTE, IMP_FIAN, Promedio_Mensual,D_fsi,Deposito_Ultimo_semestre,D_f) VALUES (?, ?, ?, ?, ?,?, ?, ?)", 
-      #                 (identificador, fecha_deposito_db, fecha_corte_db, imp_fian_db, i_fsi_db, f"{D_fsi:.2f}", f"{ult_depo:.2f}", f"{D_f:.2f}"))
-
-        # Imprimir la tabla temporal usando tabulate
-      #  cursor.execute("SELECT * FROM #temp")
-      #  rows = cursor.fetchall()
-      #  headers = [column[0] for column in cursor.description]
-      #  print(tabulate(rows, headers=headers, tablefmt="grid"))
-
-      #  cursor.close()
-      #  conn.close()
+    def crear_tabla_provicional(self, identificador_db, fecha_deposito_db, fecha_corte_db, imp_fian_db, i_fsi_list, D_fsi_list, ult_depo_list, D_f_list):
         conn = self.establish_connection()
         cursor = conn.cursor()
 
-      #  cursor.execute("CREATE TABLE #temp (NIS_RAD INT, F_RES_CONT DATE, F_CORTE DATE, IMP_FIAN FLOAT, Promedio_Mensual FLOAT, D_fsi FLOAT, Deposito_Ultimo_semestre FLOAT, D_f FLOAT)")
-        
-        # Asegurarse de que todas las listas tengan la misma longitud
-      #  assert len(fecha_deposito_db) == len(fecha_corte_db) == len(imp_fian_db) == len(i_fsi_db) == len(D_fsi) == len(ult_depo) == len(D_f), "Las listas deben tener la misma longitud"
-        print(f"Longitud de Fecha deposito: {len(fecha_deposito_db)}")
-        print(f"Longitud de Fecha de corte:{len(fecha_corte_db)}")
-        print(f"Longitud de Deposito inicial:{len(imp_fian_db)}")
-        print(f"Longitud de i_fsi:{len(i_fsi_db)}")
-        print(f"Longitud de D_fsi:{len(D_fsi)}")
-        print(f"Longitud de Ult_deposito:{len(ult_depo)}")
-        print(f"Longitud de D_f:{len(D_f)}")
+        # Crear la tabla temporal una vez fuera del bucle
+        cursor.execute("CREATE TABLE #temp (NIS_RAD FLOAT, F_RES_CONT DATE, F_CORTE DATE, IMP_FIAN FLOAT, Promedio_Mensual FLOAT, D_fsi FLOAT, Deposito_Ultimo_semestre FLOAT, D_f FLOAT)")
+
         # Iterar sobre las listas y realizar la inserción de datos en la tabla temporal
-     #   for fecha_deposito, fecha_corte, imp_fian, i_fsi, d_fsi, u_depo, d_f in zip(fecha_deposito_db, fecha_corte_db, imp_fian_db, i_fsi_db, D_fsi, ult_depo, D_f):
-     #       cursor.execute("INSERT INTO #temp (NIS_RAD, F_RES_CONT, F_CORTE, IMP_FIAN, Promedio_Mensual, D_fsi, Deposito_Ultimo_semestre, D_f) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-     #                   (identificador, fecha_deposito, fecha_corte, imp_fian, i_fsi, d_fsi, u_depo, d_f))
+        for identificador, fecha_deposito_2, fecha_corte_2, imp_fian_2, i_fsi, d_fsi, u_depo, d_f in zip(identificador_db, fecha_deposito_db, fecha_corte_db, imp_fian_db, i_fsi_list, D_fsi_list, ult_depo_list, D_f_list):
+            identificador_ = identificador.NIS_RAD
+            fecha_deposito_c = fecha_deposito_2.F_RES_CONT
+            fecha_corte_c = fecha_corte_2.F_CORTE
+            imp_fian_3 = imp_fian_2.IMP_FIAN
+
+            # Insertar datos en la tabla temporal
+            cursor.execute("INSERT INTO #temp (NIS_RAD, F_RES_CONT, F_CORTE, IMP_FIAN, Promedio_Mensual, D_fsi, Deposito_Ultimo_semestre, D_f) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+                            (identificador_, fecha_deposito_c, fecha_corte_c, imp_fian_3, i_fsi, d_fsi, u_depo, d_f))
 
         # Imprimir la tabla temporal usando tabulate
-     #   cursor.execute("SELECT * FROM #temp")
-     #   rows = cursor.fetchall()
-     #   headers = [column[0] for column in cursor.description]
-     #   print(tabulate(rows, headers=headers, tablefmt="grid"))
+        cursor.execute("SELECT * FROM #temp")
+        rows = cursor.fetchall()
+        headers = [column[0] for column in cursor.description]
+        print(tabulate(rows, headers=headers, tablefmt="grid"))
 
         cursor.close()
         conn.close()
