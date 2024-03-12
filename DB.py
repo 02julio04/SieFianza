@@ -22,24 +22,24 @@ class Database:
         conn = self.establish_connection()
         cursor = conn.cursor()
 
-        cursor.execute("SELECT Top 1 NIS_RAD FROM [EDE-este] WHERE NIS_RAD = 4125422")
-        identificador_db = cursor.fetchone()[0]
+        cursor.execute("SELECT NIS_RAD FROM [EDE-este]")
+        identificador_db = cursor.fetchall()
 
-        cursor.execute("SELECT Top 1 F_RES_CONT FROM [EDE-este] WHERE NIS_RAD = 4125422")
-        fecha_deposito_db = cursor.fetchone()[0]
+        cursor.execute("SELECT F_RES_CONT FROM [EDE-este]")
+        fecha_deposito_db = cursor.fetchall()
+        
+        cursor.execute('SELECT F_CORTE FROM [EDE-este]')
+        fecha_corte_db = cursor.fetchall()
 
-        cursor.execute('SELECT Top 1 F_CORTE FROM [EDE-este] WHERE NIS_RAD = 4125422')
-        fecha_corte_db = cursor.fetchone()[0]
-
-        cursor.execute('SELECT Top 1 IMP_FIAN FROM [EDE-este] WHERE NIS_RAD = 4125422')
-        imp_fian_db = cursor.fetchone()[0]
+        cursor.execute('SELECT IMP_FIAN FROM [EDE-este]')
+        imp_fian_db = cursor.fetchall()
 
         cursor.close()
         conn.close()
 
         return identificador_db,fecha_deposito_db, fecha_corte_db, imp_fian_db
 
-    def buscar_tasa_interes(self, fecha_deposito_db, fecha_corte_db):
+    def buscar_tasa_interes(self, fecha_deposito_db):
         conn = self.establish_connection()
         cursor = conn.cursor()
 
