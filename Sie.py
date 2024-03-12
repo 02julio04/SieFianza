@@ -20,6 +20,10 @@ db = DB.Database(conn_str)
 def SieFianza():
     i_fsi_list = []
     t_sfi_list = []
+    D_fsi_list = []
+    ult_depo_list = []
+    ult_tasa_list = []
+    semestres_list = []
     # Buscar en la BD
     identificador_db,fecha_deposito_str,fecha_corte_str,imp_fian_db = db.buscar_en_bd()
     for row in fecha_deposito_str:  # Suponiendo que rows contiene los resultados de la consulta a la base de datos
@@ -34,15 +38,25 @@ def SieFianza():
         fecha_corte_ = fecha_corte.F_CORTE
         t_sfi = DeterminaTsfi.calcular_fraccion_semestre(fecha_deposito_, fecha_corte_)
         t_sfi_list.append(t_sfi)
+        semestres = Semestres.calcular_semestres(fecha_deposito_,fecha_corte_)
+        semestres_list.append(semestres)
     # print (t_sfi_list)
    # print(f"La fracción del semestre (t_fsi) es: {t_sfi} días,\n la fecha de depósito es: {fecha_deposito},\n la fecha de corte es: {fecha_corte},\n y el importe de la fianza es: {imp_fian_db},\n y la tasa de interés es: {i_fsi_db}")
     # Paso 1
     for imp_fian_db, t_sfi_, i_fsi_ in zip(imp_fian_db, t_sfi_list, i_fsi_list):
         imp_fian_ = imp_fian_db.IMP_FIAN
         D_fsi = p1.calcular_deposito_capitalizado(imp_fian_,t_sfi_,i_fsi_)
+        D_fsi_list.append(D_fsi)
+   # print(D_fsi_list)
    # print(f"D_fsi: {D_fsi}")
     # Paso 2
-   # ult_depo, ult_tasa = p2.calcular_capitalizacion_por_semestre_interactivo(D_fsi,i_fsi_db,Semestres.calcular_semestres(fecha_deposito,fecha_corte),fecha_deposito,fecha_corte_str)
+    for D_fsi_, i_fsi_, semestres_, fecha_deposito_,fecha_corte_ in zip(D_fsi_list, i_fsi_list, semestres_list,fecha_corte_str,fecha_deposito_str): 
+        fecha_deposito_= fecha_deposito_str.F_RES_CONT
+        fecha_corte_ = fecha_corte_str.F_CORTE       
+        ult_depo, ult_tasa = p2.calcular_capitalizacion_por_semestre_interactivo(D_fsi_,i_fsi_,semestres_,fecha_deposito_,fecha_corte_)
+        ult_depo_list.append(ult_depo)
+        ult_tasa_list.append(ult_tasa)
+        #ult_depo, ult_tasa = p2.calcular_capitalizacion_por_semestre_interactivo(D_fsi,i_fsi_db,Semestres.calcular_semestres(fecha_deposito,fecha_corte),fecha_deposito,fecha_corte_str)
     # Paso 3
    # D_f = p3.capitalización_depósito_final_semestre(ult_depo,ult_tasa, fecha_corte_str)
    # print(f"El valor final del deposito capitalizado es: {D_f}")
