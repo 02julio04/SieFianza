@@ -56,26 +56,27 @@ def calcular_capitalizacion_por_semestre_interactivo(D_calc,i_fsi_db,semestres,f
         if semestre_actual == 1:
             fecha_inicio_str = f"{año_actual}-01-01"
             fecha_corte_str = f"{año_actual}-06-30"
-            print(f"Calculando para el semestre de enero a junio del año {año_actual}.")
+    #        print(f"Calculando para el semestre de enero a junio del año {año_actual}.")
         else:
             fecha_inicio_str = f"{año_actual}-07-01"
             fecha_corte_str = f"{año_actual}-12-31"
-            print(f"Calculando para el semestre de julio a diciembre del año {año_actual}.")
+    #        print(f"Calculando para el semestre de julio a diciembre del año {año_actual}.")
 
         # Obtener la tasa de interés del semestre actual usando la función buscar_tasa_interes
-        print(f"Fecha a buscar en la base de datos: {fecha_corte_str}")
-        i_semestral = db.buscar_tasa_interes(fecha_corte_str, fecha_inicio_str)
-        print(f"Tasa de interés para el semestre: {i_semestral}")
+   #     print(f"Fecha a buscar en la base de datos: {fecha_corte_str}")
+        i_semestral = db.buscar_tasa_interes(fecha_corte_str)
+   #     print(f"Tasa de interés para el semestre: {i_semestral}")
 
         # Actualizar el valor de D_actual
-        D_actual *= (1 + (0.5*i_semestral/100))
-        print(f"Valor de D_actual después de aplicar la tasa de interés: {D_actual}")
+   #     print(f"i_semestral {i_semestral}")
+        D_actual *= (1 + (0.5 * i_semestral/100))
+   #     print(f"Valor de D_actual después de aplicar la tasa de interés: {D_actual}")
 
         # Agregar el depósito actual a la lista
         depositos_por_semestre.append(D_actual)
     # Mostrar todos los valores de depósito por semestre
-    for idx, deposito in enumerate(depositos_por_semestre):
-        print(f"Semestre {idx}: {deposito}")
+  #  for idx, deposito in enumerate(depositos_por_semestre):
+   #     print(f"Semestre {idx}: {deposito}")
 
     # Retornar el último depósito
     ult_deposito = depositos_por_semestre[-1]

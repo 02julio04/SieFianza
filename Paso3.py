@@ -16,9 +16,9 @@ def capitalización_depósito_final_semestre(ult_deposito, ult_tasa, fecha_corte
     ultimo_semestre = datetime(año_ultimo_semestre, 1, 1) if fecha_corte_original.month < 7 else datetime(año_ultimo_semestre, 7, 1)
 
     fraccion_dias_restantes = (fecha_corte_original - ultimo_semestre).days
-    print("la fecha de corte original es: ", fecha_corte_original)
-    print("la fecha del ultimo semestre es: ", ultimo_semestre)
-    print("La fracción de días restantes es: ", fraccion_dias_restantes)
+  #  print("la fecha de corte original es: ", fecha_corte_original)
+  #  print("la fecha del ultimo semestre es: ", ultimo_semestre)
+  #  print("La fracción de días restantes es: ", fraccion_dias_restantes)
 
     t_fsi =  fraccion_dias_restantes # int(input("Por favor, ingresa la fracción de semestre en días (t_fsi): "))
 
