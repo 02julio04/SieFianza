@@ -20,4 +20,3 @@ def calcular_deposito_capitalizado(imp_fian_db,t_fsi_calc,i_fsi_db):
     # Mostrar el resultado
     return D_fsi
 
-# print("El depósito capitalizado al finalizar la fracción de semestre inicial (D_fsi) es:", calcular_deposito_capitalizado())

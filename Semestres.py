@@ -13,11 +13,3 @@ def calcular_semestres(fecha_inicio, fecha_fin):
     cantidad_semestres = int(diferencia_dias / dias_por_semestre)
     
     return cantidad_semestres
-
-# fecha_inicio = datetime(2000, 1, 1)  # Ejemplo de fecha de inicio
-# fecha_fin = datetime(2020, 11, 13)    # Ejemplo de fecha de fin
-
-# Calcular la cantidad de semestres entre las dos fechas
-# cantidad_semestres = calcular_semestres(fecha_inicio, fecha_fin)
-
-# print("Cantidad de semestres:", cantidad_semestres)
