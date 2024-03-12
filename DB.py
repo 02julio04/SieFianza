@@ -21,13 +21,13 @@ class Database:
         conn = self.establish_connection()
         cursor = conn.cursor()
 
-        cursor.execute("SELECT Top 1 F_RES_CONT FROM [EDE-este] WHERE NIS_RAD = 5175787")
+        cursor.execute("SELECT Top 1 F_RES_CONT FROM [EDE-este] WHERE NIS_RAD = 4125422")
         fecha_deposito_db = cursor.fetchone()[0]
 
-        cursor.execute('SELECT Top 1 F_CORTE FROM [EDE-este] WHERE NIS_RAD = 5175787')
+        cursor.execute('SELECT Top 1 F_CORTE FROM [EDE-este] WHERE NIS_RAD = 4125422')
         fecha_corte_db = cursor.fetchone()[0]
 
-        cursor.execute('SELECT Top 1 IMP_FIAN FROM [EDE-este] WHERE NIS_RAD = 5175787')
+        cursor.execute('SELECT Top 1 IMP_FIAN FROM [EDE-este] WHERE NIS_RAD = 4125422')
         imp_fian_db = cursor.fetchone()[0]
 
         cursor.close()
@@ -39,8 +39,18 @@ class Database:
         conn = self.establish_connection()
         cursor = conn.cursor()
 
-        cursor.execute(f"SELECT Top 1 Promedio_Mensual FROM [Promedios] WHERE Mes = 'Enero' and Año = '2022'")
-        i_fsi_db = cursor.fetchone()[0]
+        cursor.execute(f"SELECT Top 1 Promedio_Mensual FROM [Promedios] WHERE Año >= '{fecha_deposito_db[0:4]}' and Mes = '{Enums.Enum_mes.obtener_nombre_mes(fecha_deposito_db)}'")
+        
+        # Fetch the result
+        result = cursor.fetchone()
+
+        # Check if result is None
+        if result is not None:
+            i_fsi_db = result[0]
+        else:
+            # Handle the case where no rows were found
+            print("No rows found in the database.")
+            i_fsi_db = None  # or any other appropriate value
 
         cursor.close()
         conn.close()
