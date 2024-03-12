@@ -1,6 +1,7 @@
 import pyodbc
 import Enums.Enum_mes
 import datetime
+from tabulate import tabulate
 
 # Replace 'your_server' and 'your_database' with the actual server and database names
 server = 'DAVID\\SQLEXPRESS01'
@@ -21,6 +22,9 @@ class Database:
         conn = self.establish_connection()
         cursor = conn.cursor()
 
+        cursor.execute("SELECT Top 1 NIS_RAD FROM [EDE-este] WHERE NIS_RAD = 4125422")
+        identificador_db = cursor.fetchone()[0]
+
         cursor.execute("SELECT Top 1 F_RES_CONT FROM [EDE-este] WHERE NIS_RAD = 4125422")
         fecha_deposito_db = cursor.fetchone()[0]
 
@@ -33,7 +37,7 @@ class Database:
         cursor.close()
         conn.close()
 
-        return fecha_deposito_db, fecha_corte_db, imp_fian_db
+        return identificador_db,fecha_deposito_db, fecha_corte_db, imp_fian_db
 
     def buscar_tasa_interes(self, fecha_deposito_db, fecha_corte_db):
         conn = self.establish_connection()
@@ -56,3 +60,21 @@ class Database:
         conn.close()
 
         return i_fsi_db
+    
+    def crear_tabla_provicional(self,identificador,fecha_deposito_db, fecha_corte_db, imp_fian_db, i_fsi_db, D_fsi,ult_depo,D_f):
+        conn = self.establish_connection()
+        cursor = conn.cursor()
+        cursor.execute("CREATE TABLE #temp (NIS_RAD INT, F_RES_CONT DATE, F_CORTE DATE, IMP_FIAN FLOAT, Promedio_Mensual FLOAT, D_fsi FLOAT, Deposito_Ultimo_semestre FLOAT, D_f FLOAT)")
+
+        # Insertar datos en la tabla temporal
+        cursor.execute("INSERT INTO #temp (NIS_RAD, F_RES_CONT, F_CORTE, IMP_FIAN, Promedio_Mensual,D_fsi,Deposito_Ultimo_semestre,D_f) VALUES (?, ?, ?, ?, ?,?, ?, ?)", 
+                       (identificador, fecha_deposito_db, fecha_corte_db, imp_fian_db, i_fsi_db, f"{D_fsi:.2f}", f"{ult_depo:.2f}", f"{D_f:.2f}"))
+
+        # Imprimir la tabla temporal usando tabulate
+        cursor.execute("SELECT * FROM #temp")
+        rows = cursor.fetchall()
+        headers = [column[0] for column in cursor.description]
+        print(tabulate(rows, headers=headers, tablefmt="grid"))
+
+        cursor.close()
+        conn.close()
