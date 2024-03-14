@@ -7,16 +7,11 @@ depósito:
 
 def calcular_deposito_capitalizado(imp_fian_db,t_fsi_calc,i_fsi_db):
     
-    D = imp_fian_db #float(input("ingresa el monto del depósito inicial (D): "))
-    i_fsi = i_fsi_db #float(input("ingresa la tasa de interés anual como porcentaje (i_fsi): "))
-    t_fsi = t_fsi_calc #int(input("ingresa la fracción de semestre en días (t_fsi): "))
+    i_fsi = i_fsi_db / 100
     
-    # Convertir la tasa de interés a formato decimal
-    i_fsi = i_fsi / 100
-    
-    # Calcular el depósito capitalizado
-    D_fsi = D * (1 + (i_fsi * (t_fsi / 365)))
-    
-    # Mostrar el resultado
+    # Calcular el depósito capitalizado usando la fórmula de interés compuesto
+    D_fsi = imp_fian_db * (1 + (i_fsi * (t_fsi_calc)))
+    print(f"{t_fsi_calc/365}")
     return D_fsi
 
+    

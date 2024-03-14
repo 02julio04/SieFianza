@@ -22,7 +22,7 @@ def SieFianza():
     t_sfi_list = []
     D_fsi_list = []
     ult_depo_list = []
-    ult_tasa_list = []
+    ult_tasa_list =  []
     semestres_list = []
     D_fsi_list = []
     D_f_list = []
@@ -47,8 +47,10 @@ def SieFianza():
     for imp_fian, t_sfi_, i_fsi_ in zip(imp_fian_db, t_sfi_list, i_fsi_list):
         imp_fian_ = imp_fian.IMP_FIAN
         D_fsi = p1.calcular_deposito_capitalizado(imp_fian_,t_sfi_,i_fsi_)
+        print(f"D_fsi = {D_fsi}")
         D_fsi_list.append(D_fsi)
     
+    # Paso 2
     for fecha_deposito_2, fecha_corte_2, D_fsi_, i_fsi_, semestres_ in zip(fecha_deposito_str, fecha_corte_str, D_fsi_list, i_fsi_list, semestres_list): 
         fecha_deposito_a = fecha_deposito_2.F_RES_CONT
         fecha_corte_a = fecha_corte_2.F_CORTE

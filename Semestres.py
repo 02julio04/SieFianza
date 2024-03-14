@@ -4,12 +4,21 @@ def calcular_semestres(fecha_inicio, fecha_fin):
     # Definir la duración de un semestre en días
     fecha_inicio = datetime.strptime(fecha_inicio, '%Y-%m-%d')
     fecha_fin = datetime.strptime(fecha_fin, '%Y-%m-%d')
-    dias_por_semestre = 365 / 2
     
-    # Calcular la diferencia en días entre las dos fechas
-    diferencia_dias = (fecha_fin - fecha_inicio).days
-    
+    # Calcular el año de inicio y fin
+    ano_inicio = fecha_inicio.year
+    ano_fin = fecha_fin.year
+
+    # Calcular los semestres de inicio y fin
+    semestre_inicio = 1 if fecha_inicio.month <= 6 else 2
+    semestre_fin = 1 if fecha_fin.month <= 6 else 2
+
     # Calcular la cantidad de semestres redondeando hacia abajo
-    cantidad_semestres = int(diferencia_dias / dias_por_semestre)
-    
+    cantidad_semestres = (ano_fin - ano_inicio) * 2 + semestre_fin - semestre_inicio
+
+    # Si la fecha de fin está dentro del segundo semestre y no es el final del semestre, sumamos 1
+    if fecha_fin.month > 6 and fecha_fin.day > 30:
+        cantidad_semestres += 1
+
     return cantidad_semestres
+
