@@ -2,8 +2,8 @@ from datetime import datetime
 
 def calcular_semestres(fecha_inicio, fecha_fin):
     # Definir la duración de un semestre en días
-    fecha_inicio = datetime.strptime(fecha_inicio, '%Y-%m-%d')
-    fecha_fin = datetime.strptime(fecha_fin, '%Y-%m-%d')
+    # fecha_inicio = datetime.strptime(fecha_inicio, '%Y-%m-%d')
+    # fecha_fin = datetime.strptime(fecha_fin, '%Y-%m-%d')
     
     # Calcular el año de inicio y fin
     ano_inicio = fecha_inicio.year

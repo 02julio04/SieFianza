@@ -8,14 +8,17 @@ import Semestres
 import Paso1 as p1
 import Paso2 as p2
 import Paso3 as p3
+import csv
+import datetime
+import pyodbc
 
 # Replace 'your_server' and 'your_database' with the actual server and database names
-server = 'DAVID\\SQLEXPRESS01'
-database = 'DB_SIE'
+server = 'PEDROJULIO'
+database = 'Db_SIE'
 
 # Construct connection string for Windows Authentication
 conn_str = f'DRIVER={{SQL Server}};SERVER={server};DATABASE={database};Trusted_Connection=yes'
-db = DB.Database(conn_str)
+db = DB.Database(conn_str)  # Create a new instance
 
 def SieFianza():
     i_fsi_list = []
@@ -27,7 +30,7 @@ def SieFianza():
     D_fsi_list = []
     D_f_list = []
     # Buscar en la BD
-    identificador_db,fecha_deposito_str,fecha_corte_str,imp_fian_db = db.buscar_en_bd()
+    empresa_db,identificador_db,fecha_deposito_str,fecha_corte_str,imp_fian_db = db.buscar_en_bd()
 
     for row in fecha_deposito_str:  # Suponiendo que rows contiene los resultados de la consulta a la base de datos
         fecha = row.F_RES_CONT  # Reemplaza "fecha_columna" con el nombre real de la columna de fecha
@@ -47,7 +50,7 @@ def SieFianza():
     for imp_fian, t_sfi_, i_fsi_ in zip(imp_fian_db, t_sfi_list, i_fsi_list):
         imp_fian_ = imp_fian.IMP_FIAN
         D_fsi = p1.calcular_deposito_capitalizado(imp_fian_,t_sfi_,i_fsi_)
-        print(f"D_fsi = {D_fsi}")
+        #print(f"D_fsi = {D_fsi}")
         D_fsi_list.append(D_fsi)
     
     # Paso 2
@@ -63,8 +66,35 @@ def SieFianza():
         fecha_corte_b = fecha_corte_3.F_CORTE
         D_f = p3.capitalización_depósito_final_semestre(ult_depo,ult_tasa, fecha_corte_b)
         D_f_list.append(D_f)
-
+        
     # Crear tabla provisional
-    db.crear_tabla_provicional(identificador_db,fecha_deposito_str, fecha_corte_str, imp_fian_db, i_fsi_list, D_fsi_list, ult_depo_list, D_f_list)
+    db.crear_tabla_provicional(empresa_db,identificador_db,fecha_deposito_str, fecha_corte_str, imp_fian_db, i_fsi_list, D_fsi_list, ult_depo_list, D_f_list)
 
+
+    # Save results to a file
+    with open('output.csv', 'w', newline='') as file:
+        writer = csv.writer(file)
+        # Write headers
+        writer.writerow(['Empresa','Identificador', 'Fecha Deposito', 'Fecha Corte', 'Importe Fianza', 'Interes', 'D_fsi', 'Ultimo Deposito', 'Ultima Tasa', 'D_f'])
+        
+        # Write data
+        for data in zip(empresa_db,identificador_db, fecha_deposito_str, fecha_corte_str, imp_fian_db, i_fsi_list, D_fsi_list, ult_depo_list, ult_tasa_list, D_f_list):
+            empresa = data[0][0] if isinstance(data[0], pyodbc.Row) else data[0]
+            identificador = data[1][0] if isinstance(data[1], pyodbc.Row) else data[1]
+            fecha_deposito = data[2][0] if isinstance(data[2], pyodbc.Row) else data[2]
+            fecha_corte = data[3][0] if isinstance(data[3], pyodbc.Row) else data[3]
+            importe = data[4][0] if isinstance(data[4], pyodbc.Row) else data[4]
+            formatted_fecha_deposito = fecha_deposito.strftime('%Y-%m-%d') if isinstance(fecha_deposito, datetime.datetime) else fecha_deposito
+            formatted_fecha_corte = fecha_corte.strftime('%Y-%m-%d') if isinstance(fecha_corte, datetime.datetime) else fecha_corte
+            
+            # Round the numeric values and write the new data to the file
+            new_data = [
+                empresa,  # Empresa
+                identificador,  # Identificador
+                formatted_fecha_deposito,  # Fecha Deposito
+                formatted_fecha_corte, # Fecha Corte
+                importe
+            ] + [round(value, 4) if isinstance(value, (int, float)) else value for value in data[5:]]  # Rest of data
+            
+            writer.writerow(new_data)
 SieFianza()

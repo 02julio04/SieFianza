@@ -9,7 +9,14 @@ def capitalización_depósito_final_semestre(ult_deposito, ult_tasa, fecha_corte
     D = ult_deposito # float(input("Por favor, ingresa el monto del depósito del ultimo semestre (Dsn): "))
     i_fsi =  ult_tasa # float(input("Por favor, ingresa la tasa de interés anual como porcentaje del ultimo semestre (i_fsn): "))
 
-    fecha_corte_original = datetime.strptime(fecha_corte, "%Y-%m-%d")
+        # Assume fecha_corte could be a datetime object or a string
+    if isinstance(fecha_corte, datetime):
+        fecha_corte_original = fecha_corte
+    elif isinstance(fecha_corte, str):
+        fecha_corte_original = datetime.strptime(fecha_corte, "%Y-%m-%d")
+    else:
+        # Handle other types or raise an error
+        raise TypeError("fecha_corte must be a datetime object or a string representing a date")
     
     # Determinar el año y el semestre del último semestre
     año_ultimo_semestre = fecha_corte_original.year if fecha_corte_original.month < 7 else fecha_corte_original.year

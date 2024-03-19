@@ -6,8 +6,8 @@ sucesivos que apliquen
 
 import DB
 from datetime import datetime, timedelta
-server = 'DAVID\\SQLEXPRESS01'
-database = 'DB_SIE'
+server = 'PEDROJULIO'
+database = 'Db_SIE'
 
 # Construct connection string for Windows Authentication
 conn_str = f'DRIVER={{SQL Server}};SERVER={server};DATABASE={database};Trusted_Connection=yes'
@@ -56,22 +56,22 @@ def calcular_capitalizacion_por_semestre_interactivo(D_calc,i_fsi_db,semestres,f
 
         # Determinar si el semestre actual es en enero a junio o julio a diciembre
         if semestre_actual == 1:
-            fecha_inicio_str = f"{año_actual}-01-01"
+            fecha_inicio = f"{año_actual}-01-01"
             fecha_corte_str = f"{año_actual}-06-30"
     #        print(f"Calculando para el semestre de enero a junio del año {año_actual}.")
         else:
-            fecha_inicio_str = f"{año_actual}-07-01"
+            fecha_inicio = f"{año_actual}-07-01"
             fecha_corte_str = f"{año_actual}-12-31"
     #        print(f"Calculando para el semestre de julio a diciembre del año {año_actual}.")
 
-        print(f"buscar tasa en la fecha {fecha_corte_str}.")
+        #print(f"buscar tasa en la fecha {fecha_corte_str}.")
         # Obtener la tasa de interés del semestre actual usando la función buscar_tasa_interes
         i_semestral = db.buscar_tasa_interes(fecha_corte_str)
-        print(f"Tasa en la fecha {fecha_corte_str}. = {i_semestral}")
+        #print(f"Tasa en la fecha {fecha_corte_str}. = {i_semestral}")
 
         # Actualizar el valor de D_actual
         D_actual *= (1 + (0.5 * i_semestral/100))
-        print(f"Depósito actual, para la fecha {fecha_corte_str}, con la tasa {i_semestral} = {D_actual}")
+        #print(f"Depósito actual, para la fecha {fecha_corte_str}, con la tasa {i_semestral} = {D_actual}")
         # Agregar el depósito actual a la lista
         depositos_por_semestre.append(D_actual)
     
@@ -80,7 +80,7 @@ def calcular_capitalizacion_por_semestre_interactivo(D_calc,i_fsi_db,semestres,f
     if n >= 1:
         ult_deposito = depositos_por_semestre[-2]
         ult_tasa = i_semestral
-        print(f"Ultimo depósito: {ult_deposito} y tasa {ult_tasa}.")
+       # print(f"Ultimo depósito: {ult_deposito} y tasa {ult_tasa}.")
         return ult_deposito, ult_tasa
     
     elif n == 0:
@@ -102,7 +102,8 @@ def calcular_capitalizacion_por_semestre_interactivo(D_calc,i_fsi_db,semestres,f
         for primer_dia_mes in primeros_dias_meses:
             fecha_str = primer_dia_mes.strftime("%Y-%m-%d")
             i_mensual = db.buscar_tasa_interes(fecha_str)
-            tasas_mensuales.append(i_mensual)
+            if i_mensual is not None:
+                tasas_mensuales.append(i_mensual)
         
         # Calcular el promedio de las tasas mensuales
         promedio_tasas_mensuales = sum(tasas_mensuales) / len(tasas_mensuales)

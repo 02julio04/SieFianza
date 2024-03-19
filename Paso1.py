@@ -11,7 +11,7 @@ def calcular_deposito_capitalizado(imp_fian_db,t_fsi_calc,i_fsi_db):
     
     # Calcular el depósito capitalizado usando la fórmula de interés compuesto
     D_fsi = imp_fian_db * (1 + (i_fsi * (t_fsi_calc)))
-    print(f"{t_fsi_calc/365}")
+    #print(f"{t_fsi_calc/365}")
     return D_fsi
 
     
