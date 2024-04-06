@@ -2,6 +2,8 @@ import pyodbc
 import Enums.Enum_mes
 from datetime import datetime
 from tabulate import tabulate
+import tkinter as tk
+from tkinter import messagebox, filedialog, simpledialog, Listbox
 
 # Replace 'your_server' and 'your_database' with the actual server and database names
 server = 'PEDROJULIO'
@@ -18,29 +20,35 @@ class Database:
     def establish_connection(self):
         return pyodbc.connect(self.conn_str)
 
-    def buscar_en_bd(self):
+    def buscar_en_bd(self,empresa_input):
         conn = self.establish_connection()
         cursor = conn.cursor()
 
-        cursor.execute("SELECT TOP 1000 EMPRESA FROM [EDES] WHERE YEAR(F_RES_CONT) >= 2017")
-        empresa_db = cursor.fetchall()
+        try:
+                            # Ejecutar consultas en función de la empresa elegida
+            cursor.execute(f"SELECT top 300 EMPRESA FROM [{empresa_input}] WHERE YEAR(F_RES_CONT) >= 2017")
+            empresa_db = cursor.fetchall()
 
-        cursor.execute("SELECT TOP 1000 NIS_RAD FROM [EDES] WHERE YEAR(F_RES_CONT) >= 2017")
-        identificador_db = cursor.fetchall()
+            cursor.execute(f"SELECT top 300 NIS_RAD FROM [{empresa_input}] WHERE YEAR(F_RES_CONT) >= 2017")
+            identificador_db = cursor.fetchall()
 
-        cursor.execute("SELECT TOP 1000 F_RES_CONT FROM [EDES] WHERE YEAR(F_RES_CONT) >= 2017")
-        fecha_deposito_db = cursor.fetchall()
+            cursor.execute(f"SELECT top 300 F_RES_CONT FROM [{empresa_input}] WHERE YEAR(F_RES_CONT) >= 2017")
+            fecha_deposito_db = cursor.fetchall()
+                    
+            cursor.execute(f"SELECT top 300 F_CORTE FROM [{empresa_input}] WHERE YEAR(F_RES_CONT) >= 2017")
+            fecha_corte_db = cursor.fetchall()
+
+            cursor.execute(f"SELECT top 300 IMP_FIAN FROM [{empresa_input}] WHERE YEAR(F_RES_CONT) >= 2017")
+            imp_fian_db = cursor.fetchall()
+
+            return empresa_db,identificador_db,fecha_deposito_db, fecha_corte_db, imp_fian_db
         
-        cursor.execute("SELECT TOP 1000 F_CORTE FROM [EDES] WHERE YEAR(F_RES_CONT) >= 2017")
-        fecha_corte_db = cursor.fetchall()
+        except pyodbc.Error as e:
+                    messagebox.showerror("Error", f"Ha ocurrido un error al obtener datos: {e}\n -Nombre de empresa incorrecto intentalo de nuevo")
 
-        cursor.execute("SELECT TOP 1000 IMP_FIAN FROM [EDES] WHERE YEAR(F_RES_CONT) >= 2017")
-        imp_fian_db = cursor.fetchall()
-
-        cursor.close()
-        conn.close()
-
-        return empresa_db,identificador_db,fecha_deposito_db, fecha_corte_db, imp_fian_db
+        finally:
+                cursor.close()
+                conn.close()
 
     def buscar_tasa_interes(self, fecha_deposito_db):
         conn = self.establish_connection()
@@ -55,7 +63,7 @@ class Database:
         # Now you can access the 'year' attribute
         año_deposito = fecha_deposito_date.year
         mes_nombres = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre']
-        nombre_mes = mes_nombres[fecha_deposito_date.month - 1]  # Obtén el nombre del mes en español  # o "%m" si necesitas el número del mes
+        nombre_mes = mes_nombres[fecha_deposito_date.month - 1]  # Obtén el nombre del mes en español
 
         cursor.execute(f"""
         SELECT Promedio_Mensual
@@ -88,7 +96,7 @@ class Database:
         cursor = conn.cursor()
 
         # Crear la tabla temporal una vez fuera del bucle
-        cursor.execute("CREATE TABLE #temp (EMPRESA VARCHAR(100), NIS_RAD FLOAT, F_RES_CONT DATE, F_CORTE DATE, IMP_FIAN FLOAT, Promedio_Mensual FLOAT, D_fsi FLOAT, Deposito_Ultimo_semestre FLOAT, D_f FLOAT)")
+        cursor.execute("CREATE TABLE #temp (EMPRESA VARCHAR(300), NIS_RAD FLOAT, F_RES_CONT DATE, F_CORTE DATE, IMP_FIAN FLOAT, Promedio_Mensual FLOAT, D_fsi FLOAT, Deposito_Ultimo_semestre FLOAT, D_f FLOAT)")
 
         # Iterar sobre las listas y realizar la inserción de datos en la tabla temporal
         for empresa, identificador, fecha_deposito_2, fecha_corte_2, imp_fian_2, i_fsi, d_fsi, u_depo, d_f in zip(empresa_db,identificador_db, fecha_deposito_db, fecha_corte_db, imp_fian_db, i_fsi_list, D_fsi_list, ult_depo_list, D_f_list):
@@ -110,4 +118,5 @@ class Database:
 
         cursor.close()
         conn.close()
+
 

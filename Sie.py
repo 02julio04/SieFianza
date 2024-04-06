@@ -20,7 +20,9 @@ database = 'Db_SIE'
 conn_str = f'DRIVER={{SQL Server}};SERVER={server};DATABASE={database};Trusted_Connection=yes'
 db = DB.Database(conn_str)  # Create a new instance
 
-def SieFianza():
+
+def SieFianza(empresa_input):
+    # empresa_input = input("De qué empresa quieres obtener los datos (EDEESTE, EDESUR, EDENORTE): ")
     i_fsi_list = []
     t_sfi_list = []
     D_fsi_list = []
@@ -30,7 +32,7 @@ def SieFianza():
     D_fsi_list = []
     D_f_list = []
     # Buscar en la BD
-    empresa_db,identificador_db,fecha_deposito_str,fecha_corte_str,imp_fian_db = db.buscar_en_bd()
+    empresa_db,identificador_db,fecha_deposito_str,fecha_corte_str,imp_fian_db = db.buscar_en_bd(empresa_input)
 
     for row in fecha_deposito_str:  # Suponiendo que rows contiene los resultados de la consulta a la base de datos
         fecha = row.F_RES_CONT  # Reemplaza "fecha_columna" con el nombre real de la columna de fecha
@@ -69,7 +71,7 @@ def SieFianza():
         
     # Crear tabla provisional
     db.crear_tabla_provicional(empresa_db,identificador_db,fecha_deposito_str, fecha_corte_str, imp_fian_db, i_fsi_list, D_fsi_list, ult_depo_list, D_f_list)
-
+    
 
     # Save results to a file
     with open('output.csv', 'w', newline='') as file:
@@ -97,4 +99,5 @@ def SieFianza():
             ] + [round(value, 4) if isinstance(value, (int, float)) else value for value in data[5:]]  # Rest of data
             
             writer.writerow(new_data)
-SieFianza()
+    return list(zip(empresa_db, identificador_db, fecha_deposito_str, fecha_corte_str, imp_fian_db, i_fsi_list, D_fsi_list, ult_depo_list, D_f_list))
+

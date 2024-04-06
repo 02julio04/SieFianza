@@ -14,10 +14,10 @@ conn_str = f'DRIVER={{SQL Server}};SERVER={server};DATABASE={database};Trusted_C
 db = DB.Database(conn_str)
 
 def calcular_capitalizacion_por_semestre_interactivo(D_calc,i_fsi_db,semestres,fecha_inicio,fecha_corte_str): #fecha_deposito,#fecha_corte
-    # Solicitar al usuario que ingrese los datos necesarios
-    D = D_calc # float(input("Por favor, ingresa el monto del depósito inicial (D): "))
-    i_fsi = i_fsi_db # float(input("Por favor, ingresa la tasa de interés anual como porcentaje (i_fsi): "))
-    n = semestres # int(input("Por favor, ingresa el número total de semestres a calcular: "))
+    
+    D = D_calc 
+    i_fsi = i_fsi_db 
+    n = semestres 
 
     # Convertir la tasa de interés anual a una tasa semestral
     i_fsi = i_fsi / 100

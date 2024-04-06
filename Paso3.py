@@ -5,9 +5,8 @@ from datetime import datetime
 
 
 def capitalización_depósito_final_semestre(ult_deposito, ult_tasa, fecha_corte):
-    # Solicitar al usuario que ingrese los datos necesarios
-    D = ult_deposito # float(input("Por favor, ingresa el monto del depósito del ultimo semestre (Dsn): "))
-    i_fsi =  ult_tasa # float(input("Por favor, ingresa la tasa de interés anual como porcentaje del ultimo semestre (i_fsn): "))
+    D = ult_deposito 
+    i_fsi =  ult_tasa 
 
         # Assume fecha_corte could be a datetime object or a string
     if isinstance(fecha_corte, datetime):
