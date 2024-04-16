@@ -26,19 +26,19 @@ class Database:
 
         try:
                             # Ejecutar consultas en función de la empresa elegida
-            cursor.execute(f"SELECT top 300 EMPRESA FROM [{empresa_input}] WHERE YEAR(F_RES_CONT) >= 2017")
+            cursor.execute(f"SELECT top 5 EMPRESA FROM [{empresa_input}] WHERE YEAR(F_RES_CONT) >= 2017")
             empresa_db = cursor.fetchall()
 
-            cursor.execute(f"SELECT top 300 NIS_RAD FROM [{empresa_input}] WHERE YEAR(F_RES_CONT) >= 2017")
+            cursor.execute(f"SELECT top 5 NIS_RAD FROM [{empresa_input}] WHERE YEAR(F_RES_CONT) >= 2017")
             identificador_db = cursor.fetchall()
 
-            cursor.execute(f"SELECT top 300 F_RES_CONT FROM [{empresa_input}] WHERE YEAR(F_RES_CONT) >= 2017")
+            cursor.execute(f"SELECT top 5 F_RES_CONT FROM [{empresa_input}] WHERE YEAR(F_RES_CONT) >= 2017")
             fecha_deposito_db = cursor.fetchall()
                     
-            cursor.execute(f"SELECT top 300 F_CORTE FROM [{empresa_input}] WHERE YEAR(F_RES_CONT) >= 2017")
+            cursor.execute(f"SELECT top 5 F_CORTE FROM [{empresa_input}] WHERE YEAR(F_RES_CONT) >= 2017")
             fecha_corte_db = cursor.fetchall()
 
-            cursor.execute(f"SELECT top 300 IMP_FIAN FROM [{empresa_input}] WHERE YEAR(F_RES_CONT) >= 2017")
+            cursor.execute(f"SELECT top 5 IMP_FIAN FROM [{empresa_input}] WHERE YEAR(F_RES_CONT) >= 2017")
             imp_fian_db = cursor.fetchall()
 
             return empresa_db,identificador_db,fecha_deposito_db, fecha_corte_db, imp_fian_db
@@ -68,13 +68,10 @@ class Database:
         cursor.execute(f"""
         SELECT Promedio_Mensual
         FROM [InteresMensual]
-        WHERE Año >= {año_deposito}
+        WHERE Year >= {año_deposito}
         AND Mes = '{nombre_mes}'
         AND Promedio_Mensual IS NOT NULL
         """)
-        #print(f"Year: {año_deposito}, Month: {nombre_mes}")
-        #print(f"Executing query: SELECT Top 1 Promedio_Mensual FROM [InteresMensual] WHERE Año >= '{año_deposito}' and Mes = '{nombre_mes}'")
-
         # Fetch the result
         result = cursor.fetchone()
 
@@ -100,11 +97,20 @@ class Database:
 
         # Iterar sobre las listas y realizar la inserción de datos en la tabla temporal
         for empresa, identificador, fecha_deposito_2, fecha_corte_2, imp_fian_2, i_fsi, d_fsi, u_depo, d_f in zip(empresa_db,identificador_db, fecha_deposito_db, fecha_corte_db, imp_fian_db, i_fsi_list, D_fsi_list, ult_depo_list, D_f_list):
-            empresa_name = empresa[0]
+            # Assuming empresa is already a string
+            empresa_name = str(empresa[0])
+            # Assuming identificador is a numeric type that can be directly used
             identificador_ = identificador.NIS_RAD
-            fecha_deposito_c = fecha_deposito_2.F_RES_CONT
-            fecha_corte_c = fecha_corte_2.F_CORTE
-            imp_fian_3 = imp_fian_2.IMP_FIAN
+            # Converting dates to strings in 'yyyy-mm-dd' format
+            fecha_deposito_c = fecha_deposito_2.F_RES_CONT.strftime('%Y-%m-%d')
+            fecha_corte_c = fecha_corte_2.F_CORTE.strftime('%Y-%m-%d')
+            # Assuming imp_fian is a float
+            imp_fian_3 = float(imp_fian_2.IMP_FIAN)
+            # Converting the rest assuming they are numeric types
+            i_fsi = float(i_fsi)
+            d_fsi = float(d_fsi[0]) if isinstance(d_fsi, tuple) else float(d_fsi)
+            u_depo = float(u_depo[0]) if isinstance(u_depo, tuple) else float(u_depo)
+            d_f = float(d_f[0]) if isinstance(d_f, tuple) else float(d_f)
 
             # Insertar datos en la tabla temporal
             cursor.execute("INSERT INTO #temp (EMPRESA, NIS_RAD, F_RES_CONT, F_CORTE, IMP_FIAN, Promedio_Mensual, D_fsi, Deposito_Ultimo_semestre, D_f) VALUES (?,?, ?, ?, ?, ?, ?, ?, ?)",

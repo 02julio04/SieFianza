@@ -52,9 +52,11 @@ def SieFianza(empresa_input):
         semestres_list.append(semestres)
    
     # Paso 1
-    for imp_fian, t_sfi_, i_fsi_ in zip(imp_fian_db, t_sfi_list, i_fsi_list):
+    for imp_fian,fecha_deposito_2,fecha_corte_2, t_sfi_, i_fsi_ in zip(imp_fian_db,fecha_deposito_str,fecha_corte_str, t_sfi_list, i_fsi_list):
         imp_fian_ = imp_fian.IMP_FIAN
-        D_fsi = p1.calcular_deposito_capitalizado(imp_fian_,t_sfi_,i_fsi_)
+        fecha_deposito_a = fecha_deposito_2.F_RES_CONT
+        fecha_corte_a = fecha_corte_2.F_CORTE
+        D_fsi = p1.calcular_deposito_capitalizado(imp_fian_,t_sfi_,i_fsi_,fecha_deposito_a,fecha_corte_a)
         #print(f"D_fsi = {D_fsi}")
         D_fsi_list.append(D_fsi)
     
@@ -69,7 +71,7 @@ def SieFianza(empresa_input):
     # Paso 3
     for fecha_corte_3, ult_depo, ult_tasa in zip(fecha_corte_str, ult_depo_list, ult_tasa_list):
         fecha_corte_b = fecha_corte_3.F_CORTE
-        D_f = p3.capitalización_depósito_final_semestre(ult_depo,ult_tasa, fecha_corte_b)
+        D_f = p3.capitalización_depósito_final_semestre(ult_depo,ult_tasa, fecha_corte_b,semestres)
         D_f_list.append(D_f)
         
     # Crear tabla provisional
@@ -122,7 +124,7 @@ def format_numero(value):
         value = value[0] if value else None
     """Formatea el número para mostrar en la GUI."""
     if isinstance(value, (int, float, decimal.Decimal)):
-        return f"{value:.3f}"
+        return f"{value:.2f}"
     return value
 
 def update_gui_with_data(tree):
@@ -198,7 +200,7 @@ btn_obtener_datos.bind("<Enter>", on_enter)
 btn_obtener_datos.bind("<Leave>", on_leave)
 
 # Define las columnas del Treeview
-columns = ('Empresa', 'NIS', 'Fecha Deposito', 'Fecha Corte', 'Importe', 'Tasa', 'D_fsi', 'D_Ult_semestre', 'D_F')
+columns = ('Empresa', 'NIS', 'Fecha Deposito', 'Fecha Corte', 'Importe', 'Tasa', 'Deposito semestre inicial', 'D_Ult_semestre', 'D_F')
 tree = ttk.Treeview(root, columns=columns, show='headings')
 
 # Configura las columnas y los encabezados

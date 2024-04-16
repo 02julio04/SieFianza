@@ -17,18 +17,18 @@ def calcular_fraccion_semestre(fecha_deposito_str,fecha_corte_str):
     # Obteniendo el año y mes de la fecha de depósito
     year = fecha_deposito.year
     month = fecha_deposito.month
-    
-    # Definiendo la fecha del próximo semestre
-    if month <= 6:  # Si la fecha de depósito es antes de junio, el próximo semestre es junio de este año
+
+        # Definiendo la fecha del próximo semestre
+    if (fecha_deposito.month <= 6 and fecha_corte.month <= 6 and (fecha_corte.year == fecha_deposito.year)) or (fecha_deposito.month > 6 and fecha_corte.month > 6 and (fecha_corte.year == fecha_deposito.year)):
+        t_fsi = ((fecha_corte - fecha_deposito).days) / 365
+        return t_fsi
+    elif month <= 6:  # Si la fecha de depósito es antes de junio, el próximo semestre es junio de este año
         prox_semestre = datetime(year, 6, 30)
     else:  # Si la fecha de depósito es en julio o después, el próximo semestre es diciembre de este año
         prox_semestre = datetime(year, 12, 31)
-    
-    # Calcular la fracción del semestre
-    #print(f"t_fsi = ({prox_semestre} - {fecha_deposito}).days = {(prox_semestre - fecha_deposito).days}")
-    
-    t_fsi = (prox_semestre - fecha_deposito).days / 365
-    #print(f"t_fsi = {t_fsi}")
-    
+
+        # Calcular la fracción del semestre
+    t_fsi = ((prox_semestre - fecha_deposito).days) / 365
+    print(f"proximo semestre: {prox_semestre} - fecha_deposito: {fecha_deposito} = {t_fsi}")
     return t_fsi
 
