@@ -26,19 +26,19 @@ class Database:
 
         try:
                             # Ejecutar consultas en función de la empresa elegida
-            cursor.execute(f"SELECT top 5 EMPRESA FROM [{empresa_input}] WHERE YEAR(F_RES_CONT) >= 2017")
+            cursor.execute(f"SELECT top 1 EMPRESA FROM [{empresa_input}] WHERE YEAR(F_RES_CONT) >= 2017")
             empresa_db = cursor.fetchall()
 
-            cursor.execute(f"SELECT top 5 NIS_RAD FROM [{empresa_input}] WHERE YEAR(F_RES_CONT) >= 2017")
+            cursor.execute(f"SELECT top 1 NIS_RAD FROM [{empresa_input}] WHERE YEAR(F_RES_CONT) >= 2017")
             identificador_db = cursor.fetchall()
 
-            cursor.execute(f"SELECT top 5 F_RES_CONT FROM [{empresa_input}] WHERE YEAR(F_RES_CONT) >= 2017")
+            cursor.execute(f"SELECT top 1 F_RES_CONT FROM [{empresa_input}] WHERE YEAR(F_RES_CONT) >= 2017")
             fecha_deposito_db = cursor.fetchall()
                     
-            cursor.execute(f"SELECT top 5 F_CORTE FROM [{empresa_input}] WHERE YEAR(F_RES_CONT) >= 2017")
+            cursor.execute(f"SELECT top 1 F_CORTE FROM [{empresa_input}] WHERE YEAR(F_RES_CONT) >= 2017")
             fecha_corte_db = cursor.fetchall()
 
-            cursor.execute(f"SELECT top 5 IMP_FIAN FROM [{empresa_input}] WHERE YEAR(F_RES_CONT) >= 2017")
+            cursor.execute(f"SELECT top 1 IMP_FIAN FROM [{empresa_input}] WHERE YEAR(F_RES_CONT) >= 2017")
             imp_fian_db = cursor.fetchall()
 
             return empresa_db,identificador_db,fecha_deposito_db, fecha_corte_db, imp_fian_db
@@ -53,6 +53,7 @@ class Database:
     def buscar_tasa_interes(self, fecha_deposito_db):
         conn = self.establish_connection()
         cursor = conn.cursor()
+        
         if isinstance(fecha_deposito_db, str):
     # It's a string, so parse it to a datetime object
             date_format = "%Y-%m-%d"  # Adjust this format to match the actual date format

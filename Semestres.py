@@ -1,4 +1,5 @@
-from datetime import datetime
+
+from datetime import datetime, timedelta
 
 def calcular_semestres(fecha_inicio, fecha_fin):
     
@@ -19,4 +20,3 @@ def calcular_semestres(fecha_inicio, fecha_fin):
         cantidad_semestres += 1
 
     return cantidad_semestres
-

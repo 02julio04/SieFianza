@@ -56,22 +56,22 @@ def SieFianza(empresa_input):
         imp_fian_ = imp_fian.IMP_FIAN
         fecha_deposito_a = fecha_deposito_2.F_RES_CONT
         fecha_corte_a = fecha_corte_2.F_CORTE
-        D_fsi = p1.calcular_deposito_capitalizado(imp_fian_,t_sfi_,i_fsi_,fecha_deposito_a,fecha_corte_a)
+        D_fsi, i_x, it = p1.calcular_deposito_capitalizado(imp_fian_,t_sfi_,i_fsi_,fecha_deposito_a,fecha_corte_a)
         #print(f"D_fsi = {D_fsi}")
         D_fsi_list.append(D_fsi)
     
     # Paso 2
-    for fecha_deposito_2, fecha_corte_2, D_fsi_, i_fsi_, semestres_ in zip(fecha_deposito_str, fecha_corte_str, D_fsi_list, i_fsi_list, semestres_list): 
+    for fecha_deposito_2, fecha_corte_2, D_fsi_, i_fsi_, cantidad_semestres in zip(fecha_deposito_str, fecha_corte_str, D_fsi_list, i_fsi_list, semestres_list): 
         fecha_deposito_a = fecha_deposito_2.F_RES_CONT
         fecha_corte_a = fecha_corte_2.F_CORTE
-        ult_depo, ult_tasa = p2.calcular_capitalizacion_por_semestre_interactivo(D_fsi_, i_fsi_, semestres_, fecha_deposito_a,fecha_corte_a)
+        ult_depo, ult_tasa = p2.calcular_capitalizacion_por_semestre_interactivo(D_fsi_, i_fsi_, cantidad_semestres, fecha_deposito_a,fecha_corte_a)
         ult_depo_list.append(ult_depo)
         ult_tasa_list.append(ult_tasa)
 
     # Paso 3
-    for fecha_corte_3, ult_depo, ult_tasa in zip(fecha_corte_str, ult_depo_list, ult_tasa_list):
+    for fecha_corte_3, ult_depo, ult_tasa,cantidad_semestres in zip(fecha_corte_str, ult_depo_list, ult_tasa_list,semestres_list):
         fecha_corte_b = fecha_corte_3.F_CORTE
-        D_f = p3.capitalización_depósito_final_semestre(ult_depo,ult_tasa, fecha_corte_b,semestres)
+        D_f = p3.capitalización_depósito_final_semestre(ult_depo,ult_tasa, fecha_corte_b,cantidad_semestres)
         D_f_list.append(D_f)
         
     # Crear tabla provisional

@@ -4,12 +4,8 @@ AGREGAR la capitalización del depósito para la fracción final de semestre
 from datetime import datetime
 
 
-def capitalización_depósito_final_semestre(ult_deposito, ult_tasa, fecha_corte,semestres):
-    print(ult_deposito)
-    print(ult_tasa)
-    print(fecha_corte)
-
-    if semestres == 0:
+def capitalización_depósito_final_semestre(ult_deposito, ult_tasa, fecha_corte,cantidad_semestres):
+    if cantidad_semestres == 0:
         return ult_deposito
     else:
         D = ult_deposito 
@@ -36,6 +32,12 @@ def capitalización_depósito_final_semestre(ult_deposito, ult_tasa, fecha_corte
         D = float(D[0]) if isinstance(D, tuple) else float(D)
         # Calcular el depósito capitalizado
         D_f = D * (1 + ((t_fsi / 365) * i_fsi))
+        print(f"Ult Depósito (Received): {ult_deposito}")
+        print(f"Tasa (Received): {ult_tasa}")
+        print(f"Fecha Corte (Processed): {fecha_corte_original}")
+        print(f"Días Restantes: {fraccion_dias_restantes}")
+        print(f"D_f Calculated: {D_f}")
+        print("----------------------")
 
         # Mostrar el resultado
         return D_f
