@@ -14,13 +14,10 @@ import pyodbc
 import tkinter as tk
 from tkinter import ttk, PhotoImage
 import decimal
-
-# Replace 'your_server' and 'your_database' with the actual server and database names
-server = 'PEDROJULIO'
-database = 'Db_SIE'
+import config
 
 # Construct connection string for Windows Authentication
-conn_str = f'DRIVER={{SQL Server}};SERVER={server};DATABASE={database};Trusted_Connection=yes'
+conn_str = f'DRIVER={{SQL Server}};SERVER={config.server};DATABASE={config.database};UID={config.username};PWD={config.password}'
 db = DB.Database(conn_str)  # Create a new instance
 
 
@@ -64,7 +61,7 @@ def SieFianza(empresa_input):
     for fecha_deposito_2, fecha_corte_2, D_fsi_, i_fsi_, cantidad_semestres in zip(fecha_deposito_str, fecha_corte_str, D_fsi_list, i_fsi_list, semestres_list): 
         fecha_deposito_a = fecha_deposito_2.F_RES_CONT
         fecha_corte_a = fecha_corte_2.F_CORTE
-        ult_depo, ult_tasa = p2.calcular_capitalizacion_por_semestre_interactivo(D_fsi_, i_fsi_, cantidad_semestres, fecha_deposito_a,fecha_corte_a)
+        ult_depo, ult_tasa = p2.calcular_capitalizacion_por_semestre_interactivo(D_fsi_, i_x, cantidad_semestres, it,fecha_corte_a)
         ult_depo_list.append(ult_depo)
         ult_tasa_list.append(ult_tasa)
 

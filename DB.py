@@ -4,13 +4,11 @@ from datetime import datetime
 from tabulate import tabulate
 import tkinter as tk
 from tkinter import messagebox, filedialog, simpledialog, Listbox
+import config
 
-# Replace 'your_server' and 'your_database' with the actual server and database names
-server = 'PEDROJULIO'
-database = 'Db_SIE'
 
 # Construct connection string for Windows Authentication
-conn_str = f'DRIVER={{SQL Server}};SERVER={server};DATABASE={database};Trusted_Connection=yes'
+conn_str = f'DRIVER={{SQL Server}};SERVER={config.server};DATABASE={config.database};UID={config.username};PWD={config.password}'
 
 class Database:
 
@@ -26,19 +24,19 @@ class Database:
 
         try:
                             # Ejecutar consultas en función de la empresa elegida
-            cursor.execute(f"SELECT top 1 EMPRESA FROM [{empresa_input}] WHERE YEAR(F_RES_CONT) >= 2017")
+            cursor.execute(f"SELECT top 50 EMPRESA FROM [{empresa_input}] WHERE YEAR(F_RES_CONT) >= 2017")
             empresa_db = cursor.fetchall()
 
-            cursor.execute(f"SELECT top 1 NIS_RAD FROM [{empresa_input}] WHERE YEAR(F_RES_CONT) >= 2017")
+            cursor.execute(f"SELECT top 50 NIS_RAD FROM [{empresa_input}] WHERE YEAR(F_RES_CONT) >= 2017")
             identificador_db = cursor.fetchall()
 
-            cursor.execute(f"SELECT top 1 F_RES_CONT FROM [{empresa_input}] WHERE YEAR(F_RES_CONT) >= 2017")
+            cursor.execute(f"SELECT top 50 F_RES_CONT FROM [{empresa_input}] WHERE YEAR(F_RES_CONT) >= 2017")
             fecha_deposito_db = cursor.fetchall()
                     
-            cursor.execute(f"SELECT top 1 F_CORTE FROM [{empresa_input}] WHERE YEAR(F_RES_CONT) >= 2017")
+            cursor.execute(f"SELECT top 50 F_CORTE FROM [{empresa_input}] WHERE YEAR(F_RES_CONT) >= 2017")
             fecha_corte_db = cursor.fetchall()
 
-            cursor.execute(f"SELECT top 1 IMP_FIAN FROM [{empresa_input}] WHERE YEAR(F_RES_CONT) >= 2017")
+            cursor.execute(f"SELECT top 50 IMP_FIAN FROM [{empresa_input}] WHERE YEAR(F_RES_CONT) >= 2017")
             imp_fian_db = cursor.fetchall()
 
             return empresa_db,identificador_db,fecha_deposito_db, fecha_corte_db, imp_fian_db

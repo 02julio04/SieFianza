@@ -5,10 +5,9 @@ depósito:
 '''
 import DB
 from datetime import datetime, timedelta
-server = 'PEDROJULIO'
-database = 'Db_SIE'
+import config
 # Construct connection string for Windows Authentication
-conn_str = f'DRIVER={{SQL Server}};SERVER={server};DATABASE={database};Trusted_Connection=yes'
+conn_str = f'DRIVER={{SQL Server}};SERVER={config.server};DATABASE={config.database};UID={config.username};PWD={config.password}'
 db = DB.Database(conn_str) 
 def calcular_deposito_capitalizado(imp_fian_db,t_fsi_calc,i_fsi_db,fecha_inicio,fecha_corte_str):
 
